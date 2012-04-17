@@ -9,72 +9,112 @@ import javaPlay.Sprite;
 
 public class CharZero extends ObjetoComMovimento {
 
-    Sprite sprite;
-    int vida;
+    Sprite spriteAtual;
+    Sprite spriteCima;
+    Sprite spriteBaixo;
+    Sprite spriteEsquerda;
+    Sprite spriteDireita;
     int velocidade;
+    private int frame;
+    private int timeElapsedInMiliseconds;
 
     public CharZero() {
 
         try {            
-            this.sprite = new Sprite("resources/nave.png", 4, 64, 64);                        
+            this.spriteAtual = new Sprite("resources/terrorist/BBMCIMA.png", 3, 26, 26);
+            this.spriteCima = new Sprite("resources/terrorist/BBMCIMA.png", 3, 26, 26);
+            this.spriteBaixo = new Sprite("resources/terrorist/BBMBAIXO.png", 3, 26, 26); 
+            this.spriteEsquerda = new Sprite("resources/terrorist/BBMESQUERDA.png", 3, 26, 26);
+            this.spriteDireita = new Sprite("resources/terrorist/BBMDIREITA.png", 1, 26, 26);
         } catch (Exception ex) {
             System.out.println("Imagem não encontrada: " + ex.getMessage());
         }
 
-        this.x = 400;
-        this.y = 272;
-        this.vida = 666;
+        this.x = 420;
+        this.y = 290;
+        this.altura = 26;
+        this.largura = 26;
     }
 
     public void step(long timeElapsed){
-        Keyboard teclado = GameEngine.getInstance().getKeyboard();                   
+        Keyboard teclado = GameEngine.getInstance().getKeyboard();
+        
+        velocidade = 4;
+      
+        
+       
 
-        if( teclado.keyDown( Keys.NUM_1) ){
-            this.velocidade = 50;
-        } else {
-            this.velocidade = 12;
+        if( teclado.keyDown( Keys.D ) ){
+            this.spriteDireita.setCurrAnimFrame(this.frame);
+            this.moveDireita(this.velocidade);
+            this.spriteAtual = spriteDireita;
+            this.timeElapsedInMiliseconds += timeElapsed;
+
+            if(this.timeElapsedInMiliseconds > 200){
+                if(this.frame >=8){
+                    this.frame = 0;
+                }
+                this.frame = (this.frame + 1);
+                this.spriteAtual.setCurrAnimFrame(this.frame);
+                this.timeElapsedInMiliseconds -= 200;
+            }
+            
+        } else if( teclado.keyDown( Keys.A ) ){
+            this.spriteDireita.setCurrAnimFrame(this.frame);
+            this.moveEsquerda(this.velocidade);
+            this.spriteAtual = spriteEsquerda;
+            this.timeElapsedInMiliseconds += timeElapsed;
+
+            if(this.timeElapsedInMiliseconds > 200){
+                if(this.frame >=5){
+                    this.frame = 0;
+                }
+                this.frame = (this.frame + 1);
+                this.spriteAtual.setCurrAnimFrame(this.frame);
+                this.timeElapsedInMiliseconds -= 200;
+            }
+
+        } else if( teclado.keyDown( Keys.W ) ){
+            this.spriteDireita.setCurrAnimFrame(this.frame);
+            this.moveCima(this.velocidade);
+            this.spriteAtual = spriteCima;
+           this.timeElapsedInMiliseconds += timeElapsed;
+
+            if(this.timeElapsedInMiliseconds > 200){
+                if(this.frame >=5){
+                    this.frame = 0;
+                }
+                this.frame = (this.frame + 1);
+                this.spriteAtual.setCurrAnimFrame(this.frame);
+                this.timeElapsedInMiliseconds -= 200;
+            }
+
+        } else if( teclado.keyDown( Keys.S ) ){
+            this.spriteDireita.setCurrAnimFrame(this.frame);
+            this.moveBaixo(this.velocidade);
+            this.spriteAtual = spriteBaixo;
+            this.timeElapsedInMiliseconds += timeElapsed;
+
+            if(this.timeElapsedInMiliseconds > 200){
+                if(this.frame >=5){
+                    this.frame = 0;
+                }
+                this.frame = (this.frame + 1);
+                this.spriteAtual.setCurrAnimFrame(this.frame);
+                this.timeElapsedInMiliseconds -= 200;
+            }
+
         }
         
-        if( teclado.keyDown( Keys.ESQUERDA) && teclado.keyDown( Keys.CIMA) ){
-            this.sprite.setCurrAnimFrame(8);
-            this.moveEsquerdaCima(this.velocidade);
-
-        } else if ( teclado.keyDown( Keys.ESQUERDA ) && teclado.keyDown( Keys.BAIXO) ){
-            this.sprite.setCurrAnimFrame(6);
-            this.moveEsquerdaBaixo(this.velocidade);
-
-        } else if ( teclado.keyDown( Keys.DIREITA ) && teclado.keyDown( Keys.CIMA) ){
-            this.sprite.setCurrAnimFrame(2);
-            this.moveDireitaCima(this.velocidade);
-
-        } else if ( teclado.keyDown( Keys.DIREITA ) && teclado.keyDown( Keys.BAIXO) ){
-            this.sprite.setCurrAnimFrame(4);
-            this.moveDireitaBaixo(this.velocidade);
-
-        } else if( teclado.keyDown( Keys.DIREITA ) ){
-            this.sprite.setCurrAnimFrame(3);
-            this.moveDireita(this.velocidade);
-
-        } else if( teclado.keyDown( Keys.ESQUERDA ) ){
-            this.sprite.setCurrAnimFrame(7);
-            this.moveEsquerda(this.velocidade);
-
-        } else if( teclado.keyDown( Keys.CIMA ) ){
-            this.sprite.setCurrAnimFrame(1);
-            this.moveCima(this.velocidade);
-
-        } else if( teclado.keyDown( Keys.BAIXO ) ){
-            this.sprite.setCurrAnimFrame(5);
-            this.moveBaixo(this.velocidade);
-
-        }
+        
+        
+        
     }
 
     public void draw(Graphics g) {        
-        g.setColor(Color.white);
-        g.drawString(this.vida+"", this.x+5, this.y-15);
+        g.setColor(Color.white);        
 
-        this.sprite.draw(g, this.x, this.y);        
+        this.spriteAtual.draw(g, this.x, this.y);        
     }
        
     public Rectangle getRetangulo(){
